@@ -1,6 +1,6 @@
-import base
-import parser
-import util
+from . import base
+from . import parser
+from . import util
 
 import os
 
@@ -17,8 +17,8 @@ def build(smbuildfile, compiler, plugins, packages, flags='', output_dir='builds
     """Performs the entire build process."""
     # setup directory structure, execute user-configurations
     plugin_build_dir = os.path.join(output_dir, 'plugins')
-    util.mkdir(output_dir)
-    util.mkdir(plugin_build_dir)
+    os.makedirs(output_dir, exist_ok=True)
+    os.makedirs(plugin_build_dir, exist_ok=True)
 
     # scan deps for what we need to do
     packages_to_build = set()

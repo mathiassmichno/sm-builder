@@ -1,5 +1,5 @@
-import includescanner
-import util
+from . import includescanner
+from . import util
 
 import fileinput
 import fnmatch
@@ -106,15 +106,15 @@ class PackageContainer:
         package_dir = os.path.join(output_dir, self.name)
         if os.path.exists(package_dir):
             shutil.rmtree(package_dir)
-        util.mkdir(package_dir)
+        os.makedirs(package_dir, exist_ok=True)
         build_package(self, package_dir, packages, plugins, nosource)
         replace_args(self, package_dir, packages, plugins)
 
         # deal with any plugins supposed to be disabled
         plugin_dir = os.path.join(package_dir, 'addons', 'sourcemod', 'plugins')
-        disabled_dir = os.path.join(package_dir, 'addons', 'sourcemod', 'plugins', 'disabled')
+        disabled_dir = os.path.join(plugin_dir, 'disabled')
         if self.disabled:
-            util.mkdir(disabled_dir)
+            os.makedirs(disabled_dir, exist_ok=True)
             for p in self.disabled:
                 src = os.path.join(plugin_dir, plugins[p].name + '.smx')
                 dst = os.path.join(disabled_dir, plugins[p].name + '.smx')
@@ -150,23 +150,23 @@ def build_package(package, package_dir, packages, plugins, nosource):
             util.error(err_msg.format(package.name, p))
 
         # copy plugin binaries
-        util.mkdir(plugin_dir)
+        os.makedirs(plugin_dir, exist_ok=True)
         binary_path = os.path.join(package_dir, '..', 'plugins', p + '.smx')
         shutil.copy2(binary_path, plugin_dir)
 
         # copy source files
         if not nosource:
-            util.mkdir(output_source_dir)
+            os.makedirs(output_source_dir, exist_ok=True)
             for source_file in plugins[p].source_files:
                 source_path = os.path.join(plugins[p].source_dir, source_file)
                 output_file_path = os.path.join(output_source_dir, source_file)
-                util.mkdir(os.path.dirname(output_file_path))
+                os.makedirs(os.path.dirname(output_file_path), exist_ok=True)
                 shutil.copyfile(source_path, output_file_path)
 
     # copy filegroup definitions
     for filegroup in package.filegroups:
         filegroup_out_dir = os.path.join(package_dir, filegroup)
-        util.mkdir(filegroup_out_dir)
+        os.makedirs(filegroup_out_dir, exist_ok=True)
         for f in package.filegroups[filegroup]:
             if os.path.isdir(f):
                 util.copytree()

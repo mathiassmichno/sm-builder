@@ -1,4 +1,4 @@
-import util
+from . import util
 
 import os
 
@@ -252,7 +252,7 @@ def create_includes(input_files, output):
             outtxt = get_struct_code(name, structs[name])
             outfile_name = os.path.join(output, name + '.inc')
             dirname = os.path.dirname(outfile_name)
-            util.mkdir(dirname)
+            os.makedirs(dirname, exist_ok=True)
 
             with open(outfile_name, 'w') as file:
                 file.write(outtxt)

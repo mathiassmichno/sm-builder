@@ -22,13 +22,6 @@ def error(text, die=True):
         exit(1)
 
 
-def mkdir(*args):
-    """Creates a directory path if it doesn't exist."""
-    path = ''.join(os.path.join(args))
-    if not os.path.exists(path):
-        os.makedirs(path)
-
-
 def copytree(src, dst):
     """Copies a tree of files to a destination."""
     if not os.path.exists(dst):
